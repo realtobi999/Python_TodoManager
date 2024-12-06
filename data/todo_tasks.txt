@@ -1,0 +1,4 @@
+1;Nakoupit potraviny;Vysoká;2024-10-15;Ne
+2;Dokončit projekt;Střední;;Ne
+4;Udělat domácí úkol;Nízká;2024-10-20;Ne
+3;Zavolat babičce;Střední;;Ano
