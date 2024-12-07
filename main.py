@@ -3,6 +3,9 @@ import traceback
 import todomanager
 from iridis import get_number_from_user, print_error
 
+import todomanager.console
+import todomanager.console.console
+
 TASKS_FILE_PATH = "./data/todo_tasks.txt"
 
 if __name__ == "__main__":
@@ -16,6 +19,7 @@ if __name__ == "__main__":
             if status == 0:
                 exit(0)
         except Exception as e:
+            todomanager.console.console.print_error_ascii_logo()
             print_error(f"Chyba v systému: {e}")
 
             # ask for debug mode

@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Dict, List
-from dateutil import parser
-
+from datetime import datetime
 from todomanager.entities.task import Task, TaskPriority
 
 
@@ -53,10 +52,10 @@ def map_task_from_fields(fields: List[str]) -> Task:
     # parse and validate deadline
     try:
         if fields[3]:
-            task_deadline = parser.parse(fields[3])
+            task_deadline = datetime.strptime(fields[3], "%Y-%m-%d")
         else:
             task_deadline = None
-    except parser.ParserError as e:
+    except ValueError as e:
         raise ValueError(f"Invalid deadline '{fields[3]}': Unable to parse the date. Expected format: YYYY-MM-DD.") from e
 
     # parse and validate status

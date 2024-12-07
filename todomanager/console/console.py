@@ -12,7 +12,7 @@ class ConsoleManager:
         return ConsoleManager._instance
 
 
-def print_ascii_logo() -> None:
+def print_intro_ascii_logo() -> None:
     console = ConsoleManager.get_instance()
     console.print(
         """
@@ -25,6 +25,22 @@ def print_ascii_logo() -> None:
 ▐                  ▐                     ▐    ▐            ▐                          ▐                  
         """,
         style="bright_green",
+    )
+
+
+def print_error_ascii_logo() -> None:
+    console = ConsoleManager.get_instance()
+    console.print(
+        """
+ ▄▀▀█▄▄▄▄  ▄▀▀▄▀▀▀▄  ▄▀▀▄▀▀▀▄  ▄▀▀▀▀▄   ▄▀▀▄▀▀▀▄ 
+▐  ▄▀   ▐ █   █   █ █   █   █ █      █ █   █   █ 
+  █▄▄▄▄▄  ▐  █▀▀█▀  ▐  █▀▀█▀  █      █ ▐  █▀▀█▀  
+  █    ▌   ▄▀    █   ▄▀    █  ▀▄    ▄▀  ▄▀    █  
+ ▄▀▄▄▄▄   █     █   █     █     ▀▀▀▀   █     █   
+ █    ▐   ▐     ▐   ▐     ▐            ▐     ▐   
+ ▐                                               
+        """,
+        style="bright_red",
     )
 
 

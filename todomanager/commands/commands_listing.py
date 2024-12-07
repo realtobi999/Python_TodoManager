@@ -6,80 +6,78 @@ from todomanager.entities.task import Task, TaskPriority
 FILTERS = ["priority", "status"]
 
 
-def list_tasks_with_filtering(tasks: List[Task]) -> None:
+def list_tasks_command(tasks: List[Task]) -> None:
     console = ConsoleManager.get_instance()
 
-    # get the desired filter
+    # prompt for the desired filter
     while True:
-        try:
-            print_divider(text="Filtrování")
-            console.print(f"Filtry: {', '.join(f"'{filter}'" for filter in FILTERS)}\n", style="bold")
+        print_divider(text="Filtrování")
 
-            selected_filter = console.input("Zadejte filtr: ")
+        available_filters = ", ".join(f"'{filter}'" for filter in FILTERS)
+        console.print(f"Filtry: {available_filters}\n", style="bold")
 
-            if not selected_filter in FILTERS:
-                raise ValueError("Neznámý filter, prosím zkuste to znovu.")
+        selected_filter = console.input("Zadejte filtr: ").strip()
 
+        if selected_filter not in FILTERS:
+            console.print("Neznámý filtr, prosím zkuste to znovu.", style="italic red")
+        else:
             break
-        except ValueError as e:
-            console.print(e, style="italic red")
 
     # filter by priority
     if selected_filter == "priority":
         while True:
-            try:
-                print_divider(text="Filtrování - Priority")
-                console.print(f"Priority: {', '.join(f"'{priority.value}'" for priority in TaskPriority)}\n")
+            print_divider(text="Filtrování - Priority")
 
-                # make sure that the priority is of valid value
-                selected_priority = console.input("Zadejte prioritu pro filtrování: ")
-                priority_parse_success, selected_priority = TaskPriority.try_parse(selected_priority)
+            available_priorities = ", ".join(f"'{priority.value}'" for priority in TaskPriority)
+            console.print(f"Priority: {available_priorities}\n")
 
-                if not priority_parse_success or selected_priority == None:
-                    raise ValueError("Neznámá priorita, prosím zkuste to znovu.")
+            entered_priority = console.input("Zadejte prioritu pro filtrování: ").strip()
+            is_valid_priority, parsed_priority = TaskPriority.try_parse(entered_priority)
 
+            if not is_valid_priority or parsed_priority is None:
+                console.print("Neznámá priorita, prosím zkuste to znovu.", style="italic red")
+            else:
                 break
-            except ValueError as e:
-                console.print(e, style="italic red")
 
-        tasks = list(filter(lambda task: task.Priority == selected_priority, tasks))
+        tasks = [task for task in tasks if task.Priority == parsed_priority]
+
     # filter by status
     elif selected_filter == "status":
         while True:
-            try:
-                print_divider(text="Filtrování - Status")
-                console.print(f"Statusy: {", ".join(f"'{status}'" for status in ["Dokončeno", "Nedokončeno"])}\n")
+            print_divider(text="Filtrování - Status")
+            console.print(f"Statusy: {", ".join(f"'{status}'" for status in ["Dokončeno", "Nedokončeno"])}\n")
 
-                selected_status = console.input("Zadejte status pro filtrování: ")
+            entered_status = console.input("Zadejte status pro filtrování: ").strip()
 
-                # make sure that the status is of valid value
-                if selected_status == "Dokončeno":
-                    selected_status = True
-                elif selected_status == "Nedokončeno":
-                    selected_status = False
-                else:
-                    raise ValueError("Neznámá priorita, prosím zkuste to znovu.")
+            if entered_status == "Dokončeno":
+                status_filter = True
+            elif entered_status == "Nedokončeno":
+                status_filter = False
+            else:
+                console.print("Neznámý status, prosím zkuste to znovu.", style="italic red")
+                continue
 
-                break
-            except ValueError as e:
-                console.print(e, style="italic red")
+            break
 
-        tasks = list(filter(lambda task: task.Status == selected_status, tasks))
+        tasks = [task for task in tasks if task.Status == status_filter]
 
-    # finally list the filtered tasks
+    # list the filtered tasks
     list_tasks(tasks)
 
 
 def list_tasks(tasks: List[Task]) -> None:
     table = Table(min_width=105)
 
-    columns = ["ID", "Úkol", "Priorita", "Termín", "Stav"]
-    rows = [(str(task.Id), task.Name, task.Priority.value, str(task.Deadline), "Dokončeno" if task.Status else "Nedokončeno") for task in tasks]
+    headers = ["ID", "Úkol", "Priorita", "Termín", "Stav"]
+    task_rows = [
+        (str(task.Id), task.Name, task.Priority.value, str(task.Deadline), "Dokončeno" if task.Status else "Nedokončeno")
+        for task in tasks
+    ]
 
-    for column in columns:
-        table.add_column(column)
+    for header in headers:
+        table.add_column(header)
 
-    for row in rows:
+    for row in task_rows:
         table.add_row(*row)
 
     console = ConsoleManager.get_instance()
