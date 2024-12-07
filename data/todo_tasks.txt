@@ -2,3 +2,4 @@
 2;Dokončit projekt;Střední;;Ne
 4;Udělat domácí úkol;Nízká;2024-10-20;Ne
 3;Zavolat babičce;Střední;;Ano
+5;Programkat více;Vysoká;;Ano

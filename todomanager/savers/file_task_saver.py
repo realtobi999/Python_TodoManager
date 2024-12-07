@@ -1,6 +1,5 @@
 from pathlib import Path
 from typing import List
-from todomanager.console.console import ConsoleManager
 from todomanager.entities.task import Task
 
 
