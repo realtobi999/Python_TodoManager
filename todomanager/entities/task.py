@@ -22,5 +22,5 @@ class Task:
     Id: int
     Name: str
     Priority: TaskPriority
-    DueDate: Optional[datetime]
-    IsDone: bool = False
+    Deadline: Optional[datetime]
+    Status: bool = False

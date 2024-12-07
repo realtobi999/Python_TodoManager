@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Dict, List
 from dateutil import parser
 
-from todomanager.task import Task, TaskPriority
+from todomanager.entities.task import Task, TaskPriority
 
 
 def parse_tasks(file_path: Path) -> List[Task]:
@@ -38,8 +38,8 @@ def map_task_from_fields(fields: List[str]) -> Task:
     # parse and validate ID
     try:
         task_id = int(fields[0])
-    except ValueError:
-        raise ValueError(f"Invalid ID '{fields[0]}': Must be an integer.")
+    except ValueError as e:
+        raise ValueError(f"Invalid ID '{fields[0]}': Must be an integer.") from e
 
     if task_id <= 0:
         raise ValueError(f"Invalid ID '{fields[0]}: Must be bigger than zero.'")
@@ -50,24 +50,24 @@ def map_task_from_fields(fields: List[str]) -> Task:
         valid_priorities = ", ".join(f"{priority.name} ({priority.value})" for priority in TaskPriority)
         raise ValueError(f"Invalid priority '{fields[2]}': Must be one of {valid_priorities}.")
 
-    # parse and validate due date
+    # parse and validate deadline
     try:
         if fields[3]:
-            task_due_date = parser.parse(fields[3])
+            task_deadline = parser.parse(fields[3])
         else:
-            task_due_date = None
-    except parser.ParserError:
-        raise ValueError(f"Invalid due date '{fields[3]}': Unable to parse the date. Expected format: YYYY-MM-DD.")
+            task_deadline = None
+    except parser.ParserError as e:
+        raise ValueError(f"Invalid deadline '{fields[3]}': Unable to parse the date. Expected format: YYYY-MM-DD.") from e
 
-    # parse and validate done status
-    done_status = fields[4].strip().lower()
-    if done_status not in ["ano", "ne"]:
-        raise ValueError(f"Invalid done status '{fields[4]}': Must be 'ANO' or 'NE' (case-insensitive).")
+    # parse and validate status
+    task_status = fields[4].strip().lower()
+    if task_status not in ["ano", "ne"]:
+        raise ValueError(f"Invalid status '{fields[4]}': Must be 'ANO' or 'NE' (case-insensitive).")
 
     return Task(
         Id=task_id,
         Name=fields[1].strip(),
         Priority=task_priority,
-        DueDate=task_due_date,
-        IsDone=done_status == "ano",
+        Deadline=task_deadline,
+        Status=task_status == "ano",
     )
