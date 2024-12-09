@@ -1,71 +1,89 @@
 import traceback
 from pathlib import Path
-from typing import Optional
-from todomanager.commands.command_manager import CommandTaskService, run_command
+from todomanager.commands.command_manager import CommandTaskService, get_command_from_user, run_command
 from todomanager.console.console import ConsoleManager
-from todomanager.entities.command import Command, get_command_from_user
+from todomanager.entities.enums import Command
 from todomanager.parsers.file_task_parser import parse_tasks
 from todomanager.savers.file_task_saver import save_tasks
 
 
-def run(tasks_file_path: str) -> Optional[int]:
-    console = ConsoleManager.get_instance()
-    console.clear()
+def run(tasks_file_path: str) -> int:
+    """
+    Runs the application and takes care of top level error handling.
 
+    Args:
+        tasks_file_path (str): Path to the file, where the tasks are stored.
+
+    Returns:
+        int: Returns 0 if the application executed  successfully,  or  1  if  an
+        unexpected error occurred.
+    """
+    ConsoleManager.clear_console()
+    console = ConsoleManager.get_instance()
+
+    # Wrap the entire application in a  try-except
+    # block to handle  errors  gracefully.  If  an
+    # exception occurs, provide the user  with  an
+    # option to view the full stack  trace  (DEBUG
+    # MODE) and  decide  whether  to  restart  the
+    # application.
     try:
-        # parse tasks
+        # Parse the tasks from the provided file.
         try:
             tasks = parse_tasks(file_path=Path(tasks_file_path))
         except Exception as e:
-            raise Exception("Chyba během načítání úkolů.") from e
+            raise Exception("Error occurred while loading tasks.") from e
 
-        # start the application and list tasks parsed from the file
+        # Start the application and display the parsed tasks to the user.
         try:
             ConsoleManager.print_intro_ascii_logo()
-            ConsoleManager.print_divider(text="Aktuální seznam úkolů")
+            ConsoleManager.print_divider(text="Current Task List")
             CommandTaskService.list_tasks(tasks)
         except Exception as e:
-            raise Exception("Chyba během startování aplikace.") from e
+            raise Exception("Error occurred during application startup.") from e
 
-        # handle commands inputs
+        # Continuously handle user input commands.
         while True:
             try:
                 selected_command = get_command_from_user()
 
+                # If the EXIT command is selected, save tasks  and
+                # terminate the application with a status code  of
+                # 0, indicating successful execution.
                 if selected_command == Command.EXIT:
                     save_tasks(file_path=Path(tasks_file_path), tasks=tasks)
-
-                    console.print("Úkoly byly uloženy. Ukončuji aplikaci.")
-
-                    # return 0 if everything went as planned
+                    console.print("Tasks have been saved. Exiting the application.")
                     return 0
                 else:
-                    run_command(selected_command, tasks, tasks_file_path)
+                    # Process the selected command.
+                    run_command(selected_command, tasks, Path(tasks_file_path))
 
             except Exception as e:
-                raise Exception("Chyba během zpracování příkazů.") from e
+                raise Exception("Error occurred while processing commands.") from e
+
     except Exception as e:
         ConsoleManager.print_error_ascii_logo()
-        console.print(f"Chyba v systému: {e}", style="bold red")
+        console.print(f"System error: {e}", style="bold red")
 
-        # ask for debug mode
+        # Prompt the user to enable DEBUG MODE to
+        # view the full exception stack trace.
         console.print("\n[reset]DEBUG MODE? (0/1)")
         should_debug = ConsoleManager.input_int(
             text="=> ",
-            error_message="Neplatný vstup.",
+            error_message="Invalid input.",
             conditions=[lambda n: n == 0 or n == 1],
         )
         if should_debug == 1:
             traceback.print_exception(e.__cause__)
 
-        # ask for restart of the application
-        console.print("\n[reset]Chcete zkusit restartovat aplikaci? (0/1)")
+        # Ask the user if they want to restart the application.
+        console.print("\n[reset]Do you want to restart the application? (0/1)")
         should_continue = ConsoleManager.input_int(
             text="=> ",
-            error_message="Neplatný vstup.",
+            error_message="Invalid input.",
             conditions=[lambda n: n == 0 or n == 1],
         )
         if should_continue == 1:
-            return run(tasks_file_path)
+            return run(tasks_file_path)  # Restart the application.
         if should_continue == 0:
-            return 0
+            return 1  # Exit the application with the status code inditacing error.

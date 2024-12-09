@@ -8,6 +8,10 @@ if __name__ == "__main__":
 
     status = todomanager.run(TASKS_FILE_PATH)
 
-    # if everything went well exit with status code 0
+    # Exit with status code  0  if  execution  was
+    # successful; otherwise, exit with status code
+    # 1 to indicate an error.
     if status == 0:
         exit(0)
+    elif status == 1:
+        exit(1)

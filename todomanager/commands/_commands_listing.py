@@ -1,14 +1,14 @@
 from typing import List
 from rich.table import Table
 from todomanager.console.console import ConsoleManager
-from todomanager.entities.filter import Filter
+from todomanager.entities.enums import Filter
 from todomanager.entities.task import Task, TaskPriority
 
 
 def list_tasks_with_filtering(tasks: List[Task]) -> None:
     console = ConsoleManager.get_instance()
 
-    # prompt for the desired filter
+    # Prompt the user for the desired filter.
     ConsoleManager.print_divider(text="Zobrazení úkolů - Filtrování")
     available_filters = [filter.value for filter in Filter]
     console.print(f"Hodnota pro filtrování: {", ".join(f"'{filter}'" for filter in available_filters)}\n")
@@ -21,8 +21,8 @@ def list_tasks_with_filtering(tasks: List[Task]) -> None:
         ).strip()
     )
 
-    # filter by priority
-    if selected_filter == Filter.Priority:
+    # Filter by priority.
+    if selected_filter == Filter.PRIORITY:
         ConsoleManager.print_divider(text="Zobrazení úkolů - Filtrování - Dle priority")
         available_priorities = [priority.value for priority in TaskPriority]
         console.print(f"Priority: {", ".join(f"'{priority}'" for priority in available_priorities)}\n")
@@ -35,32 +35,30 @@ def list_tasks_with_filtering(tasks: List[Task]) -> None:
             )
         )
 
-        tasks = [task for task in tasks if task.Priority == task_priority]
+        tasks = [task for task in tasks if task.priority == task_priority]
 
-    # filter by status
-    elif selected_filter == Filter.Status:
+    # Filter by status.
+    elif selected_filter == Filter.STATUS:
         ConsoleManager.print_divider(text="Zobrazení úkolů - Filtrování - Dle stavu")
         available_statuses = ["Dokončeno", "Nedokončeno"]
         console.print(f"Statusy: {", ".join(f"'{status}'" for status in available_statuses)}\n")
 
         task_status = ConsoleManager.input_string("Zadejte stav: ", conditions=[lambda status: status.strip() in available_statuses]).strip()
 
-        tasks = [task for task in tasks if task.Status == (True if task_status == "Dokončeno" else False)]
+        tasks = [task for task in tasks if task.tatus == (True if task_status == "Dokončeno" else False)]
 
-    # list the filtered tasks
+    # Finally list the filtered tasks.
     list_tasks(tasks, clear_console=True)
 
 
 def list_tasks(tasks: List[Task], clear_console: bool = False) -> None:
-    console = ConsoleManager.get_instance()
-
     if clear_console:
-        console.clear()
+        ConsoleManager.clear_console()
 
     table = Table(width=105)
 
     headers = ["ID", "Úkol", "Priorita", "Termín", "Stav"]
-    task_rows = [(str(task.Id), task.Name, task.Priority.value, str(task.Deadline), "Dokončeno" if task.Status else "Nedokončeno") for task in tasks]
+    task_rows = [(str(task.id), task.name, task.priority.value, str(task.deadline), "Dokončeno" if task.status else "Nedokončeno") for task in tasks]
 
     for header in headers:
         table.add_column(header)
