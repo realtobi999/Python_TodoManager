@@ -32,7 +32,7 @@ def run(tasks_file_path: str) -> int:
         try:
             tasks = parse_tasks(file_path=Path(tasks_file_path))
         except Exception as e:
-            raise Exception("Error occurred while loading tasks.") from e
+            raise Exception("Chyba během načítání úkolů.") from e
 
         # Start the application and display the parsed tasks to the user.
         try:
@@ -40,7 +40,7 @@ def run(tasks_file_path: str) -> int:
             ConsoleManager.print_divider(text="Current Task List")
             CommandTaskService.list_tasks(tasks)
         except Exception as e:
-            raise Exception("Error occurred during application startup.") from e
+            raise Exception("Chyba během startu aplikace.") from e
 
         # Continuously handle user input commands.
         while True:
@@ -52,18 +52,18 @@ def run(tasks_file_path: str) -> int:
                 # 0, indicating successful execution.
                 if selected_command == Command.EXIT:
                     save_tasks(file_path=Path(tasks_file_path), tasks=tasks)
-                    console.print("Tasks have been saved. Exiting the application.")
+                    console.print("Úkoly byly uloženy. Ukončuji aplikaci.")
                     return 0
                 else:
                     # Process the selected command.
                     run_command(selected_command, tasks, Path(tasks_file_path))
 
             except Exception as e:
-                raise Exception("Error occurred while processing commands.") from e
+                raise Exception("Chyba během zpracování příkazů.") from e
 
     except Exception as e:
         ConsoleManager.print_error_ascii_logo()
-        console.print(f"System error: {e}", style="bold red")
+        console.print(f"Chyba v systému: {e}", style="bold red")
 
         # Prompt the user to enable DEBUG MODE to
         # view the full exception stack trace.
@@ -77,7 +77,7 @@ def run(tasks_file_path: str) -> int:
             traceback.print_exception(e.__cause__)
 
         # Ask the user if they want to restart the application.
-        console.print("\n[reset]Do you want to restart the application? (0/1)")
+        console.print("\n[reset]Chcete restartovat aplikaci? (0/1)")
         should_continue = ConsoleManager.input_int(
             text="=> ",
             error_message="Invalid input.",

@@ -121,8 +121,8 @@ def edit_task_command(tasks: List[Task]) -> List[Task]:
     # Get a value for the new edited task deadline.
     ConsoleManager.print_divider(text="Editace úkolu - Termín splnění")
     new_task_deadline = ConsoleManager.input_string(
-        text=f"Zadejte termín splnění (YYYY-MM-DD)(aktuálně '{task_to_edit.deadline}'): ",
-        conditions=[lambda date: datetime.strptime(date, "%Y-%m-%d") if date else True],
+        text=f"Zadejte termín splnění (YYYY-MM-DD)(aktuálně '{task_to_edit.deadline if task_to_edit.deadline else "Bez termínu"}'): ",
+        conditions=[lambda date: True if date == "" else datetime.strptime(date, "%Y-%m-%d")],
     )
 
     # If the new value that is to be  assigned  is
@@ -130,7 +130,7 @@ def edit_task_command(tasks: List[Task]) -> List[Task]:
     # value as it is.
     task_to_edit.name = new_task_name if new_task_name else task_to_edit.name
     task_to_edit.priority = TaskPriority(new_task_priority) if new_task_priority else task_to_edit.priority
-    task_to_edit.deadline = new_task_deadline if new_task_deadline else task_to_edit.deadline
+    task_to_edit.deadline = datetime.strptime(new_task_deadline, "%Y-%m-%d") if new_task_deadline else task_to_edit.deadline
 
     console.print(f"Úkol byl upraven.", style="bold green")
 

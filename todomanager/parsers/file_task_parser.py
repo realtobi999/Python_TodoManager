@@ -92,9 +92,9 @@ def map_task_from_fields(fields: List[str]) -> Task:
 
     # Return a validated Task object.
     return Task(
-        Id=task_id,
-        Name=fields[1].strip(),
-        Priority=task_priority,
-        Deadline=task_deadline,
-        Status=task_status == "ano",
+        id=task_id,
+        name=fields[1].strip(),
+        priority=task_priority,
+        deadline=task_deadline,
+        status=task_status == "ano",
     )

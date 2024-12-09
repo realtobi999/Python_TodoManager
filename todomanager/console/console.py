@@ -43,7 +43,7 @@ class ConsoleManager:
                 string = console.input(text)
 
                 # Validate against conditions if provided.
-                if not all(condition(string) for condition in conditions):
+                if conditions and not all(condition(string) for condition in conditions):
                     console.print(error_message, style="italic red")
                     continue
 
@@ -77,7 +77,7 @@ class ConsoleManager:
                 number = int(console.input(text))
 
                 # Validate against conditions if provided.
-                if not all(condition(number) for condition in conditions):
+                if conditions and not all(condition(number) for condition in conditions):
                     console.print(error_message, style="italic red")
                     continue
 

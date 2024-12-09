@@ -45,7 +45,7 @@ def list_tasks_with_filtering(tasks: List[Task]) -> None:
 
         task_status = ConsoleManager.input_string("Zadejte stav: ", conditions=[lambda status: status.strip() in available_statuses]).strip()
 
-        tasks = [task for task in tasks if task.tatus == (True if task_status == "Dokončeno" else False)]
+        tasks = [task for task in tasks if task.status == (True if task_status == "Dokončeno" else False)]
 
     # Finally list the filtered tasks.
     list_tasks(tasks, clear_console=True)
@@ -58,7 +58,16 @@ def list_tasks(tasks: List[Task], clear_console: bool = False) -> None:
     table = Table(width=105)
 
     headers = ["ID", "Úkol", "Priorita", "Termín", "Stav"]
-    task_rows = [(str(task.id), task.name, task.priority.value, str(task.deadline), "Dokončeno" if task.status else "Nedokončeno") for task in tasks]
+    task_rows = [
+        (
+            str(task.id),
+            task.name,
+            task.priority.value,
+            task.deadline.strftime("%Y-%m-%d") if task.deadline else "Bez termínu",
+            "Dokončeno" if task.status else "Nedokončeno",
+        )
+        for task in tasks
+    ]
 
     for header in headers:
         table.add_column(header)
