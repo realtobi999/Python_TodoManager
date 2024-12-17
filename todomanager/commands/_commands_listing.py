@@ -10,31 +10,28 @@ def list_tasks_with_filtering(tasks: List[Task]) -> None:
 
     # Prompt the user for the desired filter.
     ConsoleManager.print_divider(text="Zobrazení úkolů - Filtrování")
-    available_filters = [filter.value for filter in Filter]
-    console.print(f"Hodnota pro filtrování: {", ".join(f"'{filter}'" for filter in available_filters)}\n")
+    console.print(f"Hodnota pro filtrování: {", ".join(f"'{filter.value}'" for filter in Filter)}\n")
 
     selected_filter = Filter(
         ConsoleManager.input_string(
             text="Zadejte filtr: ",
             error_message="Neznámá hodnota pro filtrování, zkuste to znovu.",
-            conditions=[lambda filter: filter.strip() in available_filters],
+            conditions=[lambda filter: Filter.try_parse(filter.strip())],
         ).strip()
     )
 
     # Filter by priority.
     if selected_filter == Filter.PRIORITY:
         ConsoleManager.print_divider(text="Zobrazení úkolů - Filtrování - Dle priority")
-        available_priorities = [priority.value for priority in TaskPriority]
-        console.print(f"Priority: {", ".join(f"'{priority}'" for priority in available_priorities)}\n")
+        console.print(f"Priority: {", ".join(f"'{priority.value}'" for priority in TaskPriority)}\n")
 
         task_priority = TaskPriority(
             ConsoleManager.input_string(
                 text="Zadejte prioritu: ",
                 error_message="Neznámá hodnota pro prioritu, zkuste to znovu.",
-                conditions=[lambda priority: priority.strip() in available_priorities],
-            )
+                conditions=[lambda priority: TaskPriority.try_parse(priority.strip())[0]],
+            ).strip()
         )
-
         tasks = [task for task in tasks if task.priority == task_priority]
 
     # Filter by status.
@@ -44,7 +41,6 @@ def list_tasks_with_filtering(tasks: List[Task]) -> None:
         console.print(f"Statusy: {", ".join(f"'{status}'" for status in available_statuses)}\n")
 
         task_status = ConsoleManager.input_string("Zadejte stav: ", conditions=[lambda status: status.strip() in available_statuses]).strip()
-
         tasks = [task for task in tasks if task.status == (True if task_status == "Dokončeno" else False)]
 
     # Finally list the filtered tasks.

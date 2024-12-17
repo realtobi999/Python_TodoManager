@@ -13,15 +13,14 @@ def add_task_command(tasks: List[Task]) -> List[Task]:
 
     # Get a value for the new task priority.
     ConsoleManager.print_divider(text="Nový úkol - Priorita")
-    available_priorities = [priority.value for priority in TaskPriority]
-    console.print(f"Priority: {", ".join(f"'{priority}'" for priority in available_priorities)}\n")
+    console.print(f"Priority: {", ".join(f"'{priority.value}'" for priority in TaskPriority)}\n")
 
     task_priority = TaskPriority(
         ConsoleManager.input_string(
             text="Zadejte prioritu: ",
             error_message="Neznámá hodnota pro prioritu, zkuste to znovu.",
-            conditions=[lambda priority: priority.strip() in available_priorities],
-        )
+            conditions=[lambda priority: TaskPriority.try_parse(priority.strip())[0]],
+        ).strip()
     )
 
     # Get a value for the new task deadline.
@@ -82,7 +81,6 @@ def complete_task_command(tasks: List[Task]) -> List[Task]:
     if task_to_complete.status:
         console.print(f"\nÚkol je již označen jako dokončený.", style="bold green")
         return tasks
-
     task_to_complete.status = True
 
     console.print(f"\nÚkol byl označen jako dokončený.", style="bold green")
@@ -100,7 +98,6 @@ def edit_task_command(tasks: List[Task]) -> List[Task]:
         error_message="Úkol s tímto ID nebyl nalezen, zkuste to prosím znovu.",
         conditions=[lambda n: n > 0, lambda n: n in list(task.id for task in tasks)],
     )
-
     task_to_edit = [task for task in tasks if task.id == task_to_edit_id][0]
 
     # Get a value for the new edited task name.
@@ -109,14 +106,13 @@ def edit_task_command(tasks: List[Task]) -> List[Task]:
 
     # Get a value for the new edited task priority.
     ConsoleManager.print_divider(text="Editace úkolu - Priorita")
-    available_priorities = [priority.value for priority in TaskPriority]
-    console.print(f"Priority: {", ".join(f"'{priority}'" for priority in available_priorities)}\n")
+    console.print(f"Priority: {", ".join(f"'{priority.value}'" for priority in TaskPriority)}\n")
 
     new_task_priority = ConsoleManager.input_string(
         text="Zadejte prioritu: ",
         error_message="Neznámá hodnota pro prioritu, zkuste to znovu.",
-        conditions=[lambda priority: True if priority.strip() == "" else priority.strip() in available_priorities],
-    )
+        conditions=[lambda priority: TaskPriority.try_parse(priority.strip())[0]],
+    ).strip()
 
     # Get a value for the new edited task deadline.
     ConsoleManager.print_divider(text="Editace úkolu - Termín splnění")

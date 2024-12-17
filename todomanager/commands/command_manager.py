@@ -49,14 +49,14 @@ def run_command(command: Command, tasks: List[Task], tasks_file_path: Path) -> N
     # class (we exclude the EXIT  command  because
     # it is not proper to define it here).
 
-    if command == Command.ADD:
-        tasks = CommandTaskService.add_task(tasks)
-
-    elif command == Command.LIST:
+    if command == Command.LIST:
         ConsoleManager.print_divider(text="Zobrazení úkolů")
         filter_choice = ConsoleManager.input_int(text="[reset]Chcete filtrovat? (0/1): ", conditions=[lambda n: n == 1 or n == 0])
 
         CommandTaskService.list_tasks(tasks, filtering=True if filter_choice == 1 else False, clear_console=True)
+
+    elif command == Command.ADD:
+        tasks = CommandTaskService.add_task(tasks)
 
     elif command == Command.REMOVE:
         tasks = CommandTaskService.remove_task(tasks)
@@ -80,16 +80,16 @@ def get_command_from_user() -> Command:
         Command: The command chosen by the user.
     """
     console = ConsoleManager.get_instance()
-    ConsoleManager.print_divider(text="Příkazový řádek")
 
-    available_commands = [command.value for command in Command]
-    console.print(f"Příkazy: {", ".join(f"'{command}'" for command in available_commands)}\n")
+    # Get the command from the user.
+    ConsoleManager.print_divider(text="Příkazový řádek")
+    console.print(f"Příkazy: {", ".join(f"'{command.value}'" for command in Command)}\n")
 
     command = Command(
         ConsoleManager.input_string(
             text="Zadejte příkaz: ",
             error_message="Neznámý příkaz, zkuste to prosím znovu.",
-            conditions=[lambda command: command.strip() in available_commands],
+            conditions=[lambda command: Command.try_parse(command.strip())[0]],
         ).strip()
     )
 
