@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 from rich.table import Table
 from todomanager.console.console import ConsoleManager
@@ -32,7 +33,7 @@ def list_tasks_with_filtering(tasks: List[Task]) -> None:
                 conditions=[lambda priority: TaskPriority.try_parse(priority.strip())[0]],
             ).strip()
         )
-        tasks = [task for task in tasks if task.priority == task_priority]
+        filtered_tasks = [task for task in tasks if task.priority == task_priority]
 
     # Filter by status.
     elif selected_filter == Filter.STATUS:
@@ -40,11 +41,21 @@ def list_tasks_with_filtering(tasks: List[Task]) -> None:
         available_statuses = ["Dokončeno", "Nedokončeno"]
         console.print(f"Statusy: {", ".join(f"'{status}'" for status in available_statuses)}\n")
 
-        task_status = ConsoleManager.input_string("Zadejte stav: ", conditions=[lambda status: status.strip() in available_statuses]).strip()
-        tasks = [task for task in tasks if task.status == (True if task_status == "Dokončeno" else False)]
+        task_status = ConsoleManager.input_string(text="Zadejte stav: ", conditions=[lambda status: status.strip() in available_statuses]).strip()
+        filtered_tasks = [task for task in tasks if task.status == (True if task_status == "Dokončeno" else False)]
+
+    # Filter by deadline.
+    elif selected_filter == Filter.DEADLINE:
+        ConsoleManager.print_divider(text="Zobrazení úkolů - Filtrování - Dle deadline")
+
+        deadline_limit = datetime.strptime(
+            ConsoleManager.input_string(text="Zadejte datum pro filtrování (YYYY-MM-DD): ", conditions=[lambda date_str: datetime.strptime(date_str, "%Y-%m-%d")]), "%Y-%m-%d"
+        )
+
+        filtered_tasks = [task for task in tasks if task.deadline and task.deadline <= deadline_limit]
 
     # Finally list the filtered tasks.
-    list_tasks(tasks, clear_console=True)
+    list_tasks(filtered_tasks, clear_console=True)
 
 
 def list_tasks(tasks: List[Task], clear_console: bool = False) -> None:

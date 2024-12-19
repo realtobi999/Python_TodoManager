@@ -1,117 +1,65 @@
-# Prg24-26_Project_02_ToDo_list_manager_app
+# Tasks Manager
 
-Project_02_ToDo_list_manager_app.py
+## Table of Contents
 
-Vytvořte terminálovou aplikaci, která bude sloužit jako ToDo list. 
-Aplikace umožní uživateli spravovat úkoly, ukládat je do souboru a načítat při startu aplikace. 
+- **[Summary](#summary)**
+  - **[Features](#features)**
+- **[Hot to run?](#how-to-run)**
 
-## Funkcionalita aplikace
-* Přidání úkolu - aplikace umožní uživateli přidat nový úkol. 
-  Každý úkol bude obsahovat následující vlastnosti:
-        Název úkolu (povinný)
-        Priorita úkolu (nízká, střední, vysoká) – volitelné, výchozí je střední.
-        Termín splnění úkolu ve formátu YYYY-MM-DD (volitelné, může být prázdné).
-        Status úkolu (hotovo/nehotovo), který se bude standardně nastavovat na "nehotovo" při vytvoření nového úkolu.
-* Zobrazení seznamu úkolů - uživatel může zobrazit seznam všech úkolů. 
-  Seznam bude obsahovat všechny úkoly s jejich vlastnostmi. Uživatel může také filtrovat úkoly podle:
-        Priorit (zobrazí jen úkoly s konkrétní prioritou)
-        Stavu úkolu (hotovo/nehotovo)
-        Termínu splnění (úkoly s blížícím se termínem)
-* Odstranění úkolu - aplikace umožní odstranit úkol ze seznamu podle ID nebo názvu.
-* Označení úkolu jako dokončeného - uživatel může označit libovolný úkol jako "hotovo". 
-  Tento úkol bude v seznamu označen jako dokončený, ale zůstane uložený pro případné další zobrazení.
-* Editace úkolu - uživatel může změnit vlastnosti již existujícího úkolu. 
-  Bude možné upravit název, prioritu, termín nebo status úkolu.
-* Uložení a načtení úkolů ze souboru - při ukončení aplikace se všechny úkoly uloží do souboru 
-  ve formátu CSV nebo JSON. Aplikace při spuštění tento soubor načte a pokračuje v práci s dříve uloženými úkoly.
+## Summary
 
-## Formát souboru s úkoly
-Seznam úkolů bude uložen v textovém souboru ve složce data, který bude mít následující strukturu:
-    Každý úkol bude na jednom řádku a jednotlivé vlastnosti budou odděleny středníkem.
-    Pokud nebude zadán termín, zůstane pole prázdné.
+- Console application for managing tasks
+- Data persist by saving the tasks to a file
 
-## Ukázkový soubor todo_tasks.txt:
-        1;Nakoupit potraviny;Vysoká;2024-10-15;Ne
-        2;Dokončit projekt;Střední;;Ne
-        3;Udělat domácí úkol;Nízká;2024-10-20;Ne
-        4;Zavolat babičce;Střední;;Ano
+### Features
 
-## Příkazy aplikace:
-* add
-  Přidání nového úkolu. Aplikace požádá uživatele o název úkolu, prioritu a termín. 
-  Pokud uživatel nezadá prioritu, nastaví se střední. Termín je volitelný.
-* list
-  Zobrazení seznamu úkolů. Uživatel může zadat parametr pro filtrování podle priority, stavu nebo termínu.
-* remove
-  Odstranění úkolu. Uživatel zadá ID nebo název úkolu, který chce odstranit.
-* complete
-  Označení úkolu jako hotového. Uživatel zadá ID nebo název úkolu, který chce označit jako hotový.
-* edit
-  Umožní uživateli upravit název, prioritu, termín nebo status existujícího úkolu.
-* save
-  Ruční uložení změn do souboru todo_tasks.txt.
-* exit
-  Automatické uložení všech změn do souboru a ukončení programu.
+- **Add Task:** Users can add a new task with the following properties:
+  - **Task Name (required):** A descriptive name for the task.
+  - **Priority (optional):** Can be `low`, `medium` (default), or `high`.
+  - **Deadline (optional):** A completion date in the format `YYYY-MM-DD`, or left empty.
+  - **Status:** Automatically set to `incomplete` when a task is created.
 
-## Struktura souborů:
-* main.py
-  Hlavní soubor aplikace, který bude obsahovat logiku pro zpracování příkazů.
-* data/todo_tasks.txt
-  Soubor s úkoly, který se bude načítat při startu aplikace a ukládat při ukončení.
+- **View Tasks:** Users can view a list of all tasks, including their properties. Filtering options:
+  - By **Priority** (e.g., only tasks with `high` priority).
+  - By **Status** (`complete` or `incomplete`).
+  - By **Deadline** (e.g., tasks with an approaching due date).
 
+- **Remove Task:** Users can delete tasks by specifying their ID or name.
 
-## Ukázkový výpis aplikace:
-        === ToDo List Manager ===
-        Nápověda: použijte příkazy 'add', 'list', 'remove', 'complete', 'edit', 'save', 'exit' pro práci s úkoly.
+- **Mark Task as Complete:** Users can mark any task as `complete`. Completed tasks remain in the list for reference.
 
-        > add
-        Zadejte název úkolu: Nakoupit potraviny
-        Zadejte prioritu (Nízká, Střední, Vysoká): Vysoká
-        Zadejte termín splnění (YYYY-MM-DD, volitelně): 2024-10-15
-        Úkol byl přidán!
+- **Edit Task:** Users can update the properties of an existing task, including name, priority, deadline, and status.
 
-        > list
-        ID | Úkol                | Priorita | Termín      | Stav
-        -----------------------------------------------------------
-        1  | Nakoupit potraviny   | Vysoká   | 2024-10-15  | Ne
-        2  | Dokončit projekt     | Střední  |             | Ne
+- **Save and Load Tasks:**
+  - On exit, tasks are saved to a file in either CSV or JSON format.
+  - On startup, the application loads tasks from the saved file and resumes from the previous state.
 
-        > complete 1
-        Úkol "Nakoupit potraviny" byl označen jako dokončený.
+## How to run?
 
-        > list
-        ID | Úkol                | Priorita | Termín      | Stav
-        -----------------------------------------------------------
-        1  | Nakoupit potraviny   | Vysoká   | 2024-10-15  | Ano
-        2  | Dokončit projekt     | Střední  |             | Ne
+**Required Libraries:**
 
-        > remove 2
-        Úkol "Dokončit projekt" byl odstraněn.
+- `rich`
+  - Install by running:
 
-        > save
-        Úkoly byly uloženy do souboru.
+    ```bash
+    pip install rich
+    ```
 
-        > exit
-        Úkoly byly uloženy. Ukončuji aplikaci.
+Before running the app, ensure that a folder named `data` exists and contains a file `todo_task.txt`.  
+This file is used to store tasks.  **DO NOT MODIFY THIS FILE MANUALLY**. Modifying it could lead to errors such as:
 
-## Detailní popis jednotlivých funkcí:
-* load_tasks()
-  Funkce pro načtení všech úkolů z textového souboru při spuštění aplikace. Pokud soubor neexistuje, vytvoří se prázdná seznamová struktura.
-* save_tasks()
-  Uloží aktuální stav seznamu úkolů do souboru. Při ukončení aplikace dojde k automatickému uložení, ale uživatel může zadat příkaz save pro ruční uložení kdykoliv.
-* add_task()
-  Přidá nový úkol. Uživatel zadá název, prioritu a termín. Pokud není zadaný termín, pole termínu zůstane prázdné. Každý úkol je přiřazen ID, které je automaticky generováno.
-* list_tasks()
-  Zobrazí všechny úkoly ve formě tabulky. Uživatel může filtrovat úkoly podle priority, termínu nebo statusu (hotovo/nehotovo).
-* remove_task()
-  Umožňuje odstranit úkol podle ID nebo názvu.
-* complete_task()
-  Označí úkol jako dokončený. Uživatel zadá ID nebo název úkolu.
-* edit_task()
-  Umožňuje uživateli upravit název, prioritu, termín nebo status existujícího úkolu.
+```bash
+Chyba v systému: Chyba během načítání úkolů.
 
-## Závěrečné poznámky:
-Všechny změny se ukládají do souboru todo_tasks.txt, který je přístupný v podadresáři data.
-Po spuštění aplikace se úkoly automaticky načtou, takže uživatel může pokračovat tam, kde skončil.
-Data jsou ukládána ve formátu, který umožňuje jednoduchou editaci i mimo aplikaci (např. v textovém editoru).
+DEBUG MODE? (0/1)
+=> 1
+Traceback (most recent call last):
+  ...
+ValueError: Invalid format on line 1: Invalid priority 'Vysoká': Must be one of LOW (nízká), MID (střední), HIGH (vysoká).
+```
 
+Execute the program in vscode or using a simple command in the root folder:
+
+``` bash
+python3 main.py
+```

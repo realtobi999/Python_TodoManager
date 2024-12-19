@@ -22,6 +22,7 @@ class Command(Enum):
 class Filter(Enum):
     PRIORITY = "priorita"
     STATUS = "stav"
+    DEADLINE = "deadline"
 
     @classmethod
     def try_parse(cls, value: str) -> Tuple[bool, Optional["Filter"]]:
@@ -32,9 +33,9 @@ class Filter(Enum):
 
 
 class TaskPriority(Enum):
-    LOW = "Nízká"
-    MID = "Střední"
-    HIGH = "Vysoká"
+    LOW = "nízká"
+    MID = "střední"
+    HIGH = "vysoká"
 
     @classmethod
     def try_parse(cls, value: str) -> Tuple[bool, Optional["TaskPriority"]]:

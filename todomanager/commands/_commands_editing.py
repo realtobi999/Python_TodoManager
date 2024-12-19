@@ -9,19 +9,21 @@ def add_task_command(tasks: List[Task]) -> List[Task]:
 
     # Get a value for the new task name.
     ConsoleManager.print_divider(text="Nový úkol - Jméno")
-    task_name = ConsoleManager.input_string(text="Zadejte název úkolu: ", conditions=[lambda name: name.strip()]).strip()
+    task_name = ConsoleManager.input_string(
+        text="Zadejte název úkolu: ", conditions=[lambda name: name.strip()]
+    ).strip()
 
     # Get a value for the new task priority.
     ConsoleManager.print_divider(text="Nový úkol - Priorita")
     console.print(f"Priority: {", ".join(f"'{priority.value}'" for priority in TaskPriority)}\n")
 
-    task_priority = TaskPriority(
-        ConsoleManager.input_string(
-            text="Zadejte prioritu: ",
-            error_message="Neznámá hodnota pro prioritu, zkuste to znovu.",
-            conditions=[lambda priority: TaskPriority.try_parse(priority.strip())[0]],
-        ).strip()
-    )
+    task_priority = ConsoleManager.input_string(
+        text="Zadejte prioritu: ",
+        error_message="Neznámá hodnota pro prioritu, zkuste to znovu.",
+        conditions=[
+            lambda priority: TaskPriority.try_parse(priority.strip())[0] if priority else True
+        ],
+    ).strip()
 
     # Get a value for the new task deadline.
     ConsoleManager.print_divider(text="Nový úkol - Termín splnění")
@@ -34,8 +36,8 @@ def add_task_command(tasks: List[Task]) -> List[Task]:
         Task(
             id=max(task.id for task in tasks) + 1,
             name=task_name,
-            priority=task_priority,
-            deadline=task_deadline if task_deadline else None,
+            priority=TaskPriority(task_priority) if task_priority else TaskPriority.MID,
+            deadline=datetime.strptime(task_deadline, "%Y-%m-%d") if task_deadline else None,
             status=False,
         )
     )
@@ -102,16 +104,20 @@ def edit_task_command(tasks: List[Task]) -> List[Task]:
 
     # Get a value for the new edited task name.
     ConsoleManager.print_divider(text="Editace úkolu - Jméno")
-    new_task_name = ConsoleManager.input_string(text=f"Zadejte nový název úkolu (aktuálně '{task_to_edit.name}'): ").strip()
+    new_task_name = ConsoleManager.input_string(
+        text=f"Zadejte nový název úkolu (aktuálně '{task_to_edit.name}'): "
+    ).strip()
 
     # Get a value for the new edited task priority.
     ConsoleManager.print_divider(text="Editace úkolu - Priorita")
     console.print(f"Priority: {", ".join(f"'{priority.value}'" for priority in TaskPriority)}\n")
 
     new_task_priority = ConsoleManager.input_string(
-        text="Zadejte prioritu: ",
+        text=f"Zadejte prioritu (aktuálně '{task_to_edit.priority.value}'): ",
         error_message="Neznámá hodnota pro prioritu, zkuste to znovu.",
-        conditions=[lambda priority: TaskPriority.try_parse(priority.strip())[0]],
+        conditions=[
+            lambda priority: TaskPriority.try_parse(priority.strip())[0] if priority else True
+        ],
     ).strip()
 
     # Get a value for the new edited task deadline.
@@ -125,8 +131,14 @@ def edit_task_command(tasks: List[Task]) -> List[Task]:
     # null, we ignore it  and  keep  the  previous
     # value as it is.
     task_to_edit.name = new_task_name if new_task_name else task_to_edit.name
-    task_to_edit.priority = TaskPriority(new_task_priority) if new_task_priority else task_to_edit.priority
-    task_to_edit.deadline = datetime.strptime(new_task_deadline, "%Y-%m-%d") if new_task_deadline else task_to_edit.deadline
+    task_to_edit.priority = (
+        TaskPriority(new_task_priority) if new_task_priority else task_to_edit.priority
+    )
+    task_to_edit.deadline = (
+        datetime.strptime(new_task_deadline, "%Y-%m-%d")
+        if new_task_deadline
+        else task_to_edit.deadline
+    )
 
     console.print(f"Úkol byl upraven.", style="bold green")
 

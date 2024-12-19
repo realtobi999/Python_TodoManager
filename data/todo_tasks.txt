@@ -1,5 +1,5 @@
-1;Nakoupit potraviny;Vysoká;2024-10-15;Ne
-2;Dokončit projekt;Střední;;Ne
-4;Udělat domácí úkol;Nízká;2024-10-20;Ne
-3;Zavolat babičce;Střední;;Ano
-5;Programkat více;Vysoká;2024-12-09;Ano
+1;Nakoupit potraviny;vysoká;2024-10-15;Ne
+2;Dokončit projekt;střední;;Ne
+4;Udělat domácí úkol;nízká;2024-10-20;Ne
+3;Zavolat babičce;střední;;Ano
+5;Programkat více;vysoká;2024-12-09;Ano

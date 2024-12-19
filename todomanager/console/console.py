@@ -87,44 +87,6 @@ class ConsoleManager:
                 console.print(error_message, style="italic red")
 
     @staticmethod
-    def print_intro_ascii_logo() -> None:
-        """
-        Prints a ASCII logo text to the console.
-        """
-        console = ConsoleManager.get_instance()
-        console.print(
-            """
- ▄▀▀▀█▀▀▄  ▄▀▀▀▀▄   ▄▀▀█▄▄   ▄▀▀▀▀▄       ▄▀▀▄ ▄▀▄  ▄▀▀█▄   ▄▀▀▄ ▀▄  ▄▀▀█▄   ▄▀▀▀▀▄   ▄▀▀█▄▄▄▄  ▄▀▀▄▀▀▀▄ 
-█    █  ▐ █      █ █ ▄▀   █ █      █     █  █ ▀  █ ▐ ▄▀ ▀▄ █  █ █ █ ▐ ▄▀ ▀▄ █        ▐  ▄▀   ▐ █   █   █ 
-▐   █     █      █ ▐ █    █ █      █     ▐  █    █   █▄▄▄█ ▐  █  ▀█   █▄▄▄█ █    ▀▄▄   █▄▄▄▄▄  ▐  █▀▀█▀  
-   █      ▀▄    ▄▀   █    █ ▀▄    ▄▀       █    █   ▄▀   █   █   █   ▄▀   █ █     █ █  █    ▌   ▄▀    █  
- ▄▀         ▀▀▀▀    ▄▀▄▄▄▄▀   ▀▀▀▀       ▄▀   ▄▀   █   ▄▀  ▄▀   █   █   ▄▀  ▐▀▄▄▄▄▀ ▐ ▄▀▄▄▄▄   █     █   
-█                  █     ▐               █    █    ▐   ▐   █    ▐   ▐   ▐   ▐         █    ▐   ▐     ▐   
-▐                  ▐                     ▐    ▐            ▐                          ▐                  
-            """,
-            style="bright_green",
-        )
-
-    @staticmethod
-    def print_error_ascii_logo() -> None:
-        """
-        Prints a ASCII error text to the console.
-        """
-        console = ConsoleManager.get_instance()
-        console.print(
-            """
- ▄▀▀█▄▄▄▄  ▄▀▀▄▀▀▀▄  ▄▀▀▄▀▀▀▄  ▄▀▀▀▀▄   ▄▀▀▄▀▀▀▄ 
-▐  ▄▀   ▐ █   █   █ █   █   █ █      █ █   █   █ 
-  █▄▄▄▄▄  ▐  █▀▀█▀  ▐  █▀▀█▀  █      █ ▐  █▀▀█▀  
-  █    ▌   ▄▀    █   ▄▀    █  ▀▄    ▄▀  ▄▀    █  
- ▄▀▄▄▄▄   █     █   █     █     ▀▀▀▀   █     █   
- █    ▐   ▐     ▐   ▐     ▐            ▐     ▐   
- ▐                                               
-            """,
-            style="bright_red",
-        )
-
-    @staticmethod
     def print_divider(width: int = 105, text: str = None, text_style: str = "bold green") -> None:
         """
         Prints a styled divider line to the console,  optionally  with  centered
@@ -167,3 +129,41 @@ class ConsoleManager:
         """
         console = ConsoleManager().get_instance()
         console.clear()
+
+    @staticmethod
+    def print_intro_ascii_logo() -> None:
+        """
+        Prints a ASCII logo text to the console.
+        """
+        console = ConsoleManager.get_instance()
+        console.print(
+            """
+ ▄▀▀▀█▀▀▄  ▄▀▀▀▀▄   ▄▀▀█▄▄   ▄▀▀▀▀▄       ▄▀▀▄ ▄▀▄  ▄▀▀█▄   ▄▀▀▄ ▀▄  ▄▀▀█▄   ▄▀▀▀▀▄   ▄▀▀█▄▄▄▄  ▄▀▀▄▀▀▀▄ 
+█    █  ▐ █      █ █ ▄▀   █ █      █     █  █ ▀  █ ▐ ▄▀ ▀▄ █  █ █ █ ▐ ▄▀ ▀▄ █        ▐  ▄▀   ▐ █   █   █ 
+▐   █     █      █ ▐ █    █ █      █     ▐  █    █   █▄▄▄█ ▐  █  ▀█   █▄▄▄█ █    ▀▄▄   █▄▄▄▄▄  ▐  █▀▀█▀  
+   █      ▀▄    ▄▀   █    █ ▀▄    ▄▀       █    █   ▄▀   █   █   █   ▄▀   █ █     █ █  █    ▌   ▄▀    █  
+ ▄▀         ▀▀▀▀    ▄▀▄▄▄▄▀   ▀▀▀▀       ▄▀   ▄▀   █   ▄▀  ▄▀   █   █   ▄▀  ▐▀▄▄▄▄▀ ▐ ▄▀▄▄▄▄   █     █   
+█                  █     ▐               █    █    ▐   ▐   █    ▐   ▐   ▐   ▐         █    ▐   ▐     ▐   
+▐                  ▐                     ▐    ▐            ▐                          ▐                  
+            """,
+            style="bright_green",
+        )
+
+    @staticmethod
+    def print_error_ascii_logo() -> None:
+        """
+        Prints a ASCII error text to the console.
+        """
+        console = ConsoleManager.get_instance()
+        console.print(
+            """
+ ▄▀▀█▄▄▄▄  ▄▀▀▄▀▀▀▄  ▄▀▀▄▀▀▀▄  ▄▀▀▀▀▄   ▄▀▀▄▀▀▀▄ 
+▐  ▄▀   ▐ █   █   █ █   █   █ █      █ █   █   █ 
+  █▄▄▄▄▄  ▐  █▀▀█▀  ▐  █▀▀█▀  █      █ ▐  █▀▀█▀  
+  █    ▌   ▄▀    █   ▄▀    █  ▀▄    ▄▀  ▄▀    █  
+ ▄▀▄▄▄▄   █     █   █     █     ▀▀▀▀   █     █   
+ █    ▐   ▐     ▐   ▐     ▐            ▐     ▐   
+ ▐                                               
+            """,
+            style="bright_red",
+        )
