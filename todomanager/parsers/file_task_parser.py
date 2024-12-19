@@ -16,8 +16,9 @@ def parse_tasks(file_path: Path) -> List[Task]:
 
     Raises:
         FileNotFoundError: Raised when the specified file path is  invalid,  the
-        file does not exist, or cannot be accessed. ValueError: Raised when  the
-        tasks in the file are improperly formatted or contain invalid data.
+        file does not exist, or cannot be accessed.
+        ValueError: Raised when the tasks in the file are  improperly  formatted
+        or contain invalid data.
 
     Returns:
         List[Task]: A list of tasks parsed from the provided text file.

@@ -21,12 +21,11 @@ def run(tasks_file_path: str) -> int:
     ConsoleManager.clear_console()
     console = ConsoleManager.get_instance()
 
-    # Wrap the entire application in a  try-except
-    # block to handle  errors  gracefully.  If  an
-    # exception occurs, provide the user  with  an
-    # option to view the full stack  trace  (DEBUG
-    # MODE) and  decide  whether  to  restart  the
-    # application.
+    # Wrap the entire application in a try-except block
+    # to  handle  errors  globally.  If  an   exception
+    # occurs, provide the user with an option  to  view
+    # the full stack  trace  (DEBUG  MODE)  and  decide
+    # whether to restart the application.
     try:
         # Parse the tasks from the provided file.
         try:

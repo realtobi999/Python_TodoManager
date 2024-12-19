@@ -26,9 +26,10 @@ class ConsoleManager:
         conditions.
 
         Args:
-            text (str): The prompt message displayed to the user.  error_message
-            (str): The error message shown to the  user  when  input  fails  the
-            validation. Defaults to 'Neplatný vstup, zkuste to  prosím  znova.'.
+            text (str): The prompt message displayed to the user.
+            error_message(str): The error message shown to the user  when  input
+            fails the validation. Defaults to 'Neplatný vstup, zkuste to  prosím
+            znova.'.
             conditions (List[Callable[[str], bool]]): A list of callables,  such
             as lambda functions, that define the validation rules. Each callable
             takes a string as input and returns a bool
