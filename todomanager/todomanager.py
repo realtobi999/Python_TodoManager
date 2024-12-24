@@ -18,7 +18,6 @@ def run(tasks_file_path: str) -> int:
         int: Returns 0 if the application executed  successfully,  or  1  if  an
         unexpected error occurred.
     """
-    ConsoleManager.clear_console()
     console = ConsoleManager.get_instance()
 
     # Wrap the entire application in a try-except block

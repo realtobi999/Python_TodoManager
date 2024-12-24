@@ -3,15 +3,11 @@
 ## Table of Contents
 
 - **[Summary](#summary)**
-  - **[Features](#features)**
-- **[Hot to run?](#how-to-run)**
+- **[How to run?](#how-to-run)**
+- **[Extensions](#extensions)**
+- **[Notes](#notes)**
 
 ## Summary
-
-- Console application for managing tasks
-- Data persist by saving the tasks to a file
-
-### Features
 
 - **Add Task:** Users can add a new task with the following properties:
   - **Task Name (required):** A descriptive name for the task.
@@ -63,3 +59,13 @@ Execute the program in vscode or using a simple command in the root folder:
 ``` bash
 python3 main.py
 ```
+
+## Extensions
+
+- Add support for JSON
+- Add support for notifications
+
+## Notes
+
+This project involved working with the **Rich** terminal library, where I gained experience in implementing parsing logic and handling user input validation.
+One key takeaway from this project was the importance of making sure an application does not crash under any circumstances. It highlighted the need to always safely handle errors and ensure the application exits gracefully, with a clear prompt for the user.
